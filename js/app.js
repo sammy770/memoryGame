@@ -1,5 +1,7 @@
-// Class for a simple stopwatch
-// source: https://codepen.io/_Billy_Brown/pen/dbJeh
+/**
+* Class for a simple stopwatch
+* source: https://codepen.io/_Billy_Brown/pen/dbJeh
+*/
 class Stopwatch {
    constructor(display, results) {
        this.running = false;
@@ -99,7 +101,11 @@ let stopwatch = new Stopwatch(
    document.querySelector('.results'));
 
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+/**
+* @description shuffle function from http://stackoverflow.com/a/2450976
+* @param {array} array
+* @returns {array} the input array in a random order
+*/
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -114,80 +120,65 @@ function shuffle(array) {
     return array;
 }
 
-/*
- * Create a list that holds all of your cards
- */
+/**
+*  a list that holds all of your cards
+* declare initial variables for moves, stars, and solved cards
+*/
 var cards = ["gem", "paper-plane", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb",
               "gem", "paper-plane", "anchor", "bolt", "cube", "leaf", "bicycle", "bomb"]
 var moves = 0;
 var stars = 3;
 var solved_cards = 0;
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-
-// function for displaying the html-code of shuffled cards
+/**
+* @description display the cards on the page
+* @param {none} none
+* @returns {string} html code with shuffled cards
+*/
 function showCards() {
-  cards = shuffle(cards);
+  cards = shuffle(cards); // shuffle the initial array of cards
   $('.deck').empty();
   cards.forEach(function(card) {
-    var html = '<li class="card"><i class="fas fa-'+card+'"></i></li>';
+    var html = '<li class="card"><i class="fas fa-'+card+'"></i></li>'; // create html for each card
     $('.deck').append(html);
-    //console.log(html);
   });
 }
-stopwatch.restart();
-// defining the order of the game
-function playGame() {
 
-  showCards();
-  compareTwoLastCards();
-  restart();
-}
-//executing the actual game
-
-playGame();
-
-
+/**
+* @description set event listener and compare the two last cards clicked
+* @param {none} none
+* @returns solved cards if two cards match, turn cards if they don't match, end game if all cards are solved
+*/
 function compareTwoLastCards() {
-
-  var previousCard = '';
-
+  var previousCard = ''; // reset variable for previous card
   $('.card').click(function() {
-//    console.log("previous card is: "+previousCard);
-
-    console.log("card has been clicked");
+    //console.log("card has been clicked"); //debugging line
     if (previousCard == '') {
       previousCard = $(this).children().attr('class');
       $(this).children().attr('id', 'first');
       $(this).addClass('open show');
-      cardAnimation(this);
+      cardAnimation(this); // animate the clicked card
 
     } else {
       if (previousCard == $(this).children().attr('class')) {
-        $(this).off();
+        $(this).off(); // disable event listener for current card
         var prev = "." + previousCard;
-        $(prev).off();
-        console.log(prev);
+        $(prev).off(); // disable event listener for previous card
+        //console.log(prev); // debugging line
         $(this).addClass('open show');
         $(this).addClass('solved');
         $('#first, #second').parent().addClass('solved');
         $('#first, #second').removeAttr('id');
-        counter();
+        counter(); // count moves up
       } else {
 
-        console.log("cards are not equal");
+        // console.log("cards are not equal"); // debugging line
         $(this).addClass('open show');
         $(this).children().attr('id', 'second');
-        errorAnimation(this);
-        errorAnimation('#first');
+        errorAnimation(this); // animate clicked card with error animation
+        errorAnimation('#first'); // animate previously clicked card with error animation
         $('#first, #second').parent().addClass('wrong');
-        counter();
+        counter(); // count moves up
         setTimeout(function() {
           $(this).removeClass('open show');
           $('#first, #second').parent().removeClass('open show wrong');
@@ -199,13 +190,18 @@ function compareTwoLastCards() {
 
     if ($('.solved').length == cards.length) {
       setTimeout(function() {
-        endGame();
+        endGame(); // end game if all cards are solved
       }, 1000)
     }
   })
 }
 
 // function for the counter
+/**
+* @description count the number of moves and display stars accordingly
+* @param {none} none
+* @returns moves count & stars display
+*/
 function counter() {
   moves += 1;
   $('.moves').text(moves);
@@ -218,6 +214,11 @@ function counter() {
   }
 }
 
+/**
+* @description animation for cards which are turned
+* @param {none} none
+* @returns change css style for turned card temporarily (100ms)
+*/
 function cardAnimation(card) {
   $(card).css('transform', 'rotateY(20deg)');
   $(card).animate({
@@ -228,6 +229,11 @@ function cardAnimation(card) {
   });
 }
 
+/**
+* @description animation for cards which do not match
+* @param {string} string for a card
+* @returns hange css style for turned card temporarily (100ms)
+*/
 function errorAnimation(card) {
   $(card).animate({
     'margin-left': '-=10px',
@@ -242,6 +248,11 @@ function errorAnimation(card) {
 }
 
 // restart button launches the game
+/**
+* @description restart the game after click on restart button
+* @param {none} none
+* @returns reset moves and stars, display shuffled cards, reset stopwatch
+*/
 function restart() {
   $('#restart-icon, #restart-button').click(function() {
     moves = 0;
@@ -256,6 +267,11 @@ function restart() {
   });
 }
 
+/**
+* @description end the game after winning
+* @param {none} none
+* @returns hide all cards, display panel with congratulation message, time, moves, stars, and restart button
+*/
 function endGame() {
   $('.score-panel, .card').css('display', 'none');
   $('.deck').css('display', 'none');
@@ -266,14 +282,18 @@ function endGame() {
   restart();
 }
 
+/**
+* @description run the actual game
+* @param {none} none
+* @returns calling several functions for playing the game
+*/
+function playGame() {
+  stopwatch.restart(); //start the stopwatch at 0:00
+  showCards(); // shuffle and display the deck of cards
+  compareTwoLastCards(); // compare the two last klicked cards
+  restart(); // restart the game if necessary
+}
 
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+
+
+playGame(); //executing the actual game
