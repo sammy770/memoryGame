@@ -271,6 +271,8 @@ function restart() {
 * @returns hide all cards, display panel with congratulation message, time, moves, stars, and restart button
 */
 function endGame() {
+  var audio = new Audio('sounds/winner_sound.m4a');
+  audio.play();
   $('.score-panel, .card').css('display', 'none');
   $('.deck').css('display', 'none');
   $('.game-over').css('display', 'block');
