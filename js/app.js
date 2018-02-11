@@ -151,37 +151,35 @@ function showCards() {
 */
 function compareTwoLastCards() {
   var previousCard = ''; // reset variable for previous card
-  $('.card').click(function() {
+  $('.card').click(clickCards);
+
+  function clickCards() {
+    $(this).addClass('open show');
+    $(this).off();
     //console.log("card has been clicked"); //debugging line
     if (previousCard == '') {
       previousCard = $(this).children().attr('class');
       $(this).children().attr('id', 'first');
-      $(this).addClass('open show');
       cardAnimation(this); // animate the clicked card
-
     } else {
       if (previousCard == $(this).children().attr('class')) {
-        $(this).off(); // disable event listener for current card
-        var prev = "." + previousCard;
-        $(prev).off(); // disable event listener for previous card
         //console.log(prev); // debugging line
-        $(this).addClass('open show');
         $(this).addClass('solved');
         $('#first, #second').parent().addClass('solved');
         $('#first, #second').removeAttr('id');
+        $('.solved').off() // disable event listener for solved cards
         counter(); // count moves up
       } else {
-
         // console.log("cards are not equal"); // debugging line
-        $(this).addClass('open show');
+        $('.card').off(); // disable all click handlers after the second click
         $(this).children().attr('id', 'second');
         errorAnimation(this); // animate clicked card with error animation
         errorAnimation('#first'); // animate previously clicked card with error animation
         $('#first, #second').parent().addClass('wrong');
         counter(); // count moves up
         setTimeout(function() {
-          $(this).removeClass('open show');
           $('#first, #second').parent().removeClass('open show wrong');
+          $('.deck').find('.card:not(".solved")').click(clickCards); // enable click handler again for all unsolved cards
           $('#first, #second').removeAttr('id');
         }, 1500);
       }
@@ -193,7 +191,7 @@ function compareTwoLastCards() {
         endGame(); // end game if all cards are solved
       }, 1000)
     }
-  })
+  }
 }
 
 // function for the counter
