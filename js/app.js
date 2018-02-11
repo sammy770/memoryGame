@@ -203,10 +203,10 @@ function compareTwoLastCards() {
 function counter() {
   moves += 1;
   $('.moves').text(moves);
-  if (moves > 20) {
+  if (moves > 12) {
     $('.stars').children('li:nth-child(3)').children().removeClass('fas fa-star').addClass('far fa-star');
     stars = 2;
-  } if (moves > 25) {
+  } if (moves > 16) {
     $('.stars').children('li:nth-child(2)').children().removeClass('fas fa-star').addClass('far fa-star');
     stars = 1;
   }
