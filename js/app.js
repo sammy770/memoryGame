@@ -161,7 +161,6 @@ function compareTwoLastCards() {
     } else {
       if (previousCard == $(this).children().attr('class')) {
         //console.log(prev); // debugging line
-        $(this).addClass('open show');
         $(this).addClass('solved');
         $('#first, #second').parent().addClass('solved');
         $('#first, #second').removeAttr('id');
