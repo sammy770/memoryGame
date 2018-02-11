@@ -151,8 +151,11 @@ function showCards() {
 */
 function compareTwoLastCards() {
   var previousCard = ''; // reset variable for previous card
-  $('.card').click(function() {
+  $('.card').click(clickCards);
+
+  function clickCards() {
     $(this).addClass('open show');
+    $(this).off();
     //console.log("card has been clicked"); //debugging line
     if (previousCard == '') {
       previousCard = $(this).children().attr('class');
@@ -175,6 +178,7 @@ function compareTwoLastCards() {
         counter(); // count moves up
         setTimeout(function() {
           $('#first, #second').parent().removeClass('open show wrong');
+          $('#first, #second').parent().click(clickCards);
           $('#first, #second').removeAttr('id');
         }, 1500);
       }
@@ -186,7 +190,7 @@ function compareTwoLastCards() {
         endGame(); // end game if all cards are solved
       }, 1000)
     }
-  })
+  }
 }
 
 // function for the counter
