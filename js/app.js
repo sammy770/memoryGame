@@ -171,6 +171,7 @@ function compareTwoLastCards() {
         counter(); // count moves up
       } else {
         // console.log("cards are not equal"); // debugging line
+        $('.card').off(); // disable all click handlers after the second click
         $(this).children().attr('id', 'second');
         errorAnimation(this); // animate clicked card with error animation
         errorAnimation('#first'); // animate previously clicked card with error animation
@@ -178,7 +179,7 @@ function compareTwoLastCards() {
         counter(); // count moves up
         setTimeout(function() {
           $('#first, #second').parent().removeClass('open show wrong');
-          $('#first, #second').parent().click(clickCards);
+          $('.deck').find('.card:not(".solved")').click(clickCards); // enable click handler again for all unsolved cards
           $('#first, #second').removeAttr('id');
         }, 1500);
       }
